@@ -17,7 +17,7 @@ curl localhost:3000
 
 # Refresh the cached repo file
 
-- It is really needed to access this endpoint since a cache file is checked in. 
+- It is not really needed to access this endpoint since a cache file is checked in. 
 - This will likely require a GitHub access token.
 
 ```
@@ -31,6 +31,8 @@ curl -s localhost:3000/repos -s | jq .
 ```
 
 # Favorite handling
+
+Note that favorites are kept in memory and so are lost after a server restart.
 
 ```
 # No favorites
