@@ -22,6 +22,19 @@ curl -X POST localhost:3000/repos/refresh
 curl -s localhost:3000/repos | jq .
 ```
 
+# Favorite handling
+
+```
+# No favorites
+curl 'localhost:3000/repos?onlyFavs' -s | jq .
+
+# Mark one repo as a favorite
+curl -X POST localhost:3000/repos/fav -H 'Content-Type: application/json' -d '{"repoId":635990360}'
+
+# One favorite found
+curl 'localhost:3000/repos?onlyFavs' -s | jq .
+```
+
 # Format
 
 ```

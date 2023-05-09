@@ -49,9 +49,32 @@ router.post('/refresh', async function (req, res, next) {
   return res.json({ message: 'Wrote ' + items.length + ' repos to cache file. Will use new list in queries.' })
 })
 
+/* POST mark a repo as a favorite. */
+router.post('/fav', async function (req, res, next) {
+  const body = req.body
+  const repoId = body.repoId
+  if (!repoId) {
+    return res.status(400).send("Missing attribute 'repoId' in POST body")
+  }
+  const withId = repositories.filter(obj => obj.id === body.repoId)
+  if (withId.length === 0) {
+    return res.status(400).send('Failed to find a repo with id ' + body.repoId)
+  }
+  if (withId.length !== 1) {
+    return res.status(400).send('Strange ... multiple repos with id ' + body.repoId)
+  }
+  withId[0].is_fav = true
+
+  return res.json({ message: 'Marked ' + body.repoId + ' as a favorite.' })
+})
+
 /* GET repository listing. */
 router.get('/', function (req, res, next) {
-  res.json(repositories.map(obj => inclusivePick(obj, 'id', 'name', 'description', 'html_url', 'stargazers_count')))
+  let toReturn = repositories
+  if ('onlyFavs' in req.query) {
+    toReturn = toReturn.filter(obj => obj.is_fav)
+  }
+  res.json(toReturn.map(obj => inclusivePick(obj, 'id', 'name', 'description', 'html_url', 'stargazers_count')))
 })
 
 module.exports = router
