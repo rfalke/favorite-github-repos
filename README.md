@@ -19,7 +19,7 @@ curl -X POST localhost:3000/repos/refresh
 # Get all repositories
 
 ```
-curl -s localhost:3000/repos | jq .
+curl -s localhost:3000/repos -s | jq .
 ```
 
 # Favorite handling
@@ -33,6 +33,14 @@ curl -X POST localhost:3000/repos/fav -H 'Content-Type: application/json' -d '{"
 
 # One favorite found
 curl 'localhost:3000/repos?onlyFavs' -s | jq .
+```
+
+# Get all repositories (filter by language)
+
+Note that the matching is case-sensitive. So "Python" will work but "python" will not.
+
+```
+curl 'localhost:3000/repos?lang=Python' -s | jq .
 ```
 
 # Format

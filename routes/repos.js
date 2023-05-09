@@ -82,7 +82,11 @@ router.get('/', function (req, res, next) {
   if ('onlyFavs' in req.query) {
     toReturn = toReturn.filter(obj => obj.is_fav)
   }
-  res.json(toReturn.map(obj => inclusivePick(obj, 'id', 'name', 'description', 'html_url', 'stargazers_count')))
+  if ('lang' in req.query) {
+    const lang = req.query.lang
+    toReturn = toReturn.filter(obj => lang in obj.languages)
+  }
+  res.json(toReturn.map(obj => inclusivePick(obj, 'id', 'name', 'description', 'html_url', 'stargazers_count', 'languages')))
 })
 
 module.exports = router
