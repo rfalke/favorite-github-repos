@@ -34,6 +34,7 @@ router.post('/refresh', async function (req, res, next) {
   const octokit = new MyOctokit()
   const parameters = { per_page: 100 }
   const items = []
+  debug('Fetching basic repo information ...')
   await octokit.paginate('GET /search/repositories?q=created:%3E' + createdAfter + '&sort=stars&order=desc', parameters, (response, done) => {
     items.push(...response.data)
 
@@ -43,6 +44,13 @@ router.post('/refresh', async function (req, res, next) {
     }
     return []
   })
+
+  debug('Got infos about ' + items.length + '. Fetching languages ...')
+  for (const repo of items) {
+    repo.languages = (await octokit.request(repo.languages_url)).data
+  }
+  debug('Got the language information')
+
   writeFileSync(CACHE_FILE_NAME, JSON.stringify(items))
   repositories = items
 
