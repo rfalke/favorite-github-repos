@@ -13,7 +13,13 @@ curl localhost:3000
 # Refresh the cached repo file
 
 ```
-curl -X POST localhost:3000/refresh
+curl -X POST localhost:3000/repos/refresh
+```
+
+# Get all repositories
+
+```
+curl -s localhost:3000/repos | jq .
 ```
 
 # Format
