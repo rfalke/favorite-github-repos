@@ -10,6 +10,12 @@ DEBUG=favorite-repos:* npm start
 curl localhost:3000
 ```
 
+# Refresh the cached repo file
+
+```
+curl -X POST localhost:3000/refresh
+```
+
 # Format
 
 ```
