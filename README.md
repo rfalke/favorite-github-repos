@@ -9,3 +9,9 @@ DEBUG=favorite-repos:* npm start
 ```
 curl localhost:3000
 ```
+
+# Format
+
+```
+npm run format
+```
