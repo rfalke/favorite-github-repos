@@ -5,12 +5,20 @@
 DEBUG=favorite-repos:* npm start
 ```
 
+You can pass a GitHub access token to increase the rate limits via environment:
+```
+DEBUG=favorite-repos:* GITHUB_TOKEN=github_pat_... npm start
+```
+
 - Test with
 ```
 curl localhost:3000
 ```
 
 # Refresh the cached repo file
+
+- It is really needed to access this endpoint since a cache file is checked in. 
+- This will likely require a GitHub access token.
 
 ```
 curl -X POST localhost:3000/repos/refresh

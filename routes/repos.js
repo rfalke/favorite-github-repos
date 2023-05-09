@@ -4,8 +4,18 @@ const { paginateRest } = require('@octokit/plugin-paginate-rest')
 const { writeFileSync, readFileSync, existsSync } = require('fs')
 const router = express.Router()
 const debug = require('debug')('favorite-repos:app')
-
 const CACHE_FILE_NAME = 'cached_github_repos.json'
+
+function getOctokitOptions () {
+  if (process.env.GITHUB_TOKEN) {
+    debug('Will use github token from environment to increase rate limit')
+    return { auth: process.env.GITHUB_TOKEN }
+  }
+  debug("No github token defined in environment variable 'GITHUB_TOKEN' to increase rate limit")
+  return {}
+}
+
+const octokitOptions = getOctokitOptions()
 
 function loadRepositoriesFromFile () {
   if (!existsSync(CACHE_FILE_NAME)) {
@@ -31,7 +41,7 @@ router.post('/refresh', async function (req, res, next) {
   const createdAfter = aWeekAgo.toISOString().slice(0, 10)
 
   const MyOctokit = Octokit.plugin(paginateRest)
-  const octokit = new MyOctokit()
+  const octokit = new MyOctokit(octokitOptions)
   const parameters = { per_page: 100 }
   const items = []
   debug('Fetching basic repo information ...')
